@@ -1,0 +1,15 @@
+#!/bin/bash
+docker run \
+    --runtime nvidia \
+    --network host \
+    -it \
+    --rm \
+    --memory 500M \
+    --memory-swap 3G \
+    -v $HOME:$HOME \
+    -e PYTHONPATH=$PYTHONPATH \
+    -e HOSTNAME=`hostname` \
+    -p 8888:8888 \
+    --user jetson \
+    --volume /tmp:/tmp \
+    eml-lab sh -c "cd `pwd` && jupyter-lab --ip 0.0.0.0 --NotebookApp.token='' --NotebookApp.password=''"
