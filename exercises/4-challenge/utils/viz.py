@@ -1,3 +1,4 @@
+from IPython.core.interactiveshell import Bool
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import torch
@@ -39,7 +40,7 @@ def num_to_class(number):
     return 'none'
 
 
-def display_result(image: torch.Tensor, output: List[torch.tensor], target: torch.Tensor, file_path='image.png') -> None:
+def display_result(image: torch.Tensor, output: List[torch.tensor], target: torch.Tensor, file_path='image.png', only_person: bool=False) -> None:
     _, ax = plt.subplots()
 
     pad = 20
@@ -62,7 +63,10 @@ def display_result(image: torch.Tensor, output: List[torch.tensor], target: torc
                 rect = patches.Rectangle((cx,cy),
                                         w, h, linewidth=2, facecolor='none', edgecolor='r')
                 ax.add_patch(rect)
-                ax.annotate(num_to_class(int(bboxes[0,i,5])) + " "+  f"{float(bboxes[0,i,4]):.2f}",(cx,cy), color='r')
+                if only_person:
+                    ax.annotate("person" + " "+  f"{float(bboxes[0,i,4]):.2f}",(cx,cy), color='r')
+                else:
+                    ax.annotate(num_to_class(int(bboxes[0,i,5])) + " "+  f"{float(bboxes[0,i,4]):.2f}",(cx,cy), color='r')
 
     for i in range(target.shape[1]):
         if target[0,i,-1] >= 0:
@@ -75,7 +79,10 @@ def display_result(image: torch.Tensor, output: List[torch.tensor], target: torc
             rect = patches.Rectangle((cx,cy),
                                     w, h, linewidth=2, facecolor='none', edgecolor='g')
             ax.add_patch(rect)
-            ax.annotate(num_to_class(int(target[0,i,5])),(cx,cy), color='g')
+            if only_person:
+                ax.annotate("person",(cx,cy), color='g')
+            else:
+                ax.annotate(num_to_class(int(target[0,i,5])),(cx,cy), color='g')
     plt.axis('off')
     plt.savefig(file_path, bbox_inches='tight')
     plt.show()
