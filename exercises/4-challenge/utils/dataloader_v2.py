@@ -63,6 +63,9 @@ class VOCDataset(torch.utils.data.Dataset):
             if transform is not(None):
                 self.transform = None
                 print("Validation set cannot be augmented, transform is set to None.")
+        elif self.image_set == 'trainval':
+            self.transform = None
+            print("Dataset has to be split. Define the transform member variable for training dataset separately.")
         else:
             raise ValueError(f"Invalid image_set. Must be 'train' or 'val', {self.image_set} was passed")
 
@@ -110,7 +113,7 @@ class VOCDataset(torch.utils.data.Dataset):
         bboxes = tv_tensors.BoundingBoxes(bboxes, format="XYWH", canvas_size=(height, width))
 
         # Augment Image and Bounding Boxes
-        if (self.image_set == 'train') and self.transform:
+        if self.transform:
             image, bboxes = self.transform(image, bboxes)
 
         target_vectors = []
