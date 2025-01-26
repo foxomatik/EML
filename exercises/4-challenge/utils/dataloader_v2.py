@@ -43,6 +43,7 @@ class VOCDataset(torch.utils.data.Dataset):
         self.dataset_path = os.path.join(root, "VOCdevkit", f"VOC{year}")
         self.only_person = only_person
         self.image_set = image_set
+        self.transform = transform
         if not os.path.exists(self.dataset_path):
             print(f"Dataset not found at {self.dataset_path}. Downloading...")
             self.dataset = VOCDetection(root, year=year, image_set=self.image_set, download=True)
