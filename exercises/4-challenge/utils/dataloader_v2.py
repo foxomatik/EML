@@ -77,7 +77,7 @@ class VOCDataset(torch.utils.data.Dataset):
     def __getitem__(self, idx):
         image, target = self.dataset[idx]
 
-        num_bboxes = 10
+        num_bboxes = 20
         width, height = 320, 320
 
         img_width, img_height = image.size

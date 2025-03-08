@@ -144,7 +144,7 @@ class COCODatasetPerson(torch.utils.data.Dataset):
     def __getitem__(self, idx):
         image, target = self.dataset[idx]
 
-        num_bboxes = 10
+        num_bboxes = 20
         width, height = 320, 320
 
         img_width, img_height = image.size
@@ -166,10 +166,10 @@ class COCODatasetPerson(torch.utils.data.Dataset):
         bboxes = []
         names = []
         for item in target:
-            x0 = int(item['bbox'][0])*scale + diff_width//2
-            y0 = int(item['bbox'][1])*scale + diff_height//2
-            w = (int(item['bbox'][2])) * scale
-            h = (int(item['bbox'][3])) * scale
+            x0 = (item['bbox'][0])*scale + diff_width//2
+            y0 = (item['bbox'][1])*scale + diff_height//2
+            w = ((item['bbox'][2])) * scale
+            h = ((item['bbox'][3])) * scale
             name = 'person'
 
             names.append(name)
@@ -187,10 +187,10 @@ class COCODatasetPerson(torch.utils.data.Dataset):
         # Convert to YOLO format (x_center, y_center, width, height) - all normalized
         target_vectors = []
         for idx, bbox in enumerate(bboxes):
-            target_vector = [(int(bbox[0]) + int(bbox[2])/2) / width,
-                            (int(bbox[1]) + int(bbox[3])/2) / height,
-                            int(bbox[2])/width,
-                            int(bbox[3])/height,
+            target_vector = [((bbox[0]) + (bbox[2])/2) / width,
+                            ((bbox[1]) + (bbox[3])/2) / height,
+                            (bbox[2])/width,
+                            (bbox[3])/height,
                             1.0,
                             class_to_num(names[idx])]
 
